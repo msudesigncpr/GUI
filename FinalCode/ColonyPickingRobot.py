@@ -1,8 +1,35 @@
 import random
 import os, glob
 import shutil
+from msilib.schema import _Validation_records
+import cv2 as cv
+import numpy as np
+import openpyxl
+import time
+import threading
 
+#create a folder that is globally accesible for image processing to use the 96 selected colonies with associated well plates
 sampledColoniesFolder = "sampleColonies"
+
+#Set up the camera
+cam_port = 0
+cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
+cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)          #set frame width (max res from data sheet)
+cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2558)          #set frame heigh (max res from data sheet)
+
+
+#Takes photos x amount of petri dishes (user specified) and saves to new folder
+def takePhotos(folder_path, numPetriDishes):
+    for i in range(1, numPetriDishes + 1):
+        result, image = cam.read()
+        print("----------IMAGE TAKEN----------")
+        if result:
+            imgName = f"petri_dish_{i}.jpg"
+            cv.imwrite(imgName, image)
+            img_path_to_save = os.path.join(folder_path, imgName)
+            shutil.move(imgName, img_path_to_save)
+    cam.release()
+    print("-------take photos---------")
 
 #Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files
 def randomize(folder_path):
@@ -378,11 +405,20 @@ def randomize(folder_path):
     return(totalList)
 
 def main():
-    #Take Images of Petri Dishes
+
+    #Save photos to another folder
+    photosFolder = "baseplatePhotos"
+    os.makedirs(photosFolder)
+
+    #Take Images of Petri Dishes and adds to folder
+    numPetriDishes = 6
+    takePhotos(photosFolder, numPetriDishes)
+
     #create a folder where text files will be placed
     imageProcessingColoniesFolder = "imgProcColonies"
     os.makedirs(imageProcessingColoniesFolder)
 
+    #call image processing using the folder created
     #temporarily moving these files manually instead of inegrating image processing
     shutil.copy(os.path.join('example1.txt'), os.path.join(imageProcessingColoniesFolder, 'example1.txt'))
     shutil.copy(os.path.join('example2.txt'), os.path.join(imageProcessingColoniesFolder, 'example2.txt'))
@@ -391,18 +427,18 @@ def main():
     shutil.copy(os.path.join('example5.txt'), os.path.join(imageProcessingColoniesFolder, 'example5.txt'))
     shutil.copy(os.path.join('example6.txt'), os.path.join(imageProcessingColoniesFolder, 'example6.txt'))
 
-        #Save photos to another folder
-        #call image processing using the folder created
     #Randomize and select 96 colonies
-        #access text files from the folder created 
-        #output 1 : a list of all of the colonies
-        #a new folder that contains 6 text files of chosen colonies with associated well
     coloniesToSample = randomize(imageProcessingColoniesFolder)     
-    print(coloniesToSample)
+    #print(coloniesToSample)
+
     #call image meta data with the file created above
+
     #create toolpath
+
     #execute toolpath with motor controls
+
     shutil.rmtree(sampledColoniesFolder)    #currently deleting the file after execution- will need to delete end of program
     shutil.rmtree(imageProcessingColoniesFolder)
+    #shutil.rmtree(photosFolder)
     
 main()
