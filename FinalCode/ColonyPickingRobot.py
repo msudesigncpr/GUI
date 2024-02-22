@@ -18,9 +18,6 @@ import CPR_tools as cpr
 import datetime
 import CPR_random
 
-#create a folder that is globally accesible for image processing to use the 96 selected colonies with associated well plates
-sampledColoniesFolder = "sampleColonies"
-
 LOGLEVEL = logging.INFO
 
 STERILIZER_COORDINATES = (461_330, 87_950, 60_000)  # Micrometers  # TODO
@@ -246,12 +243,12 @@ def main():
     os.makedirs(imagesforProcessingFolder)
 
      #Manually addnig photos for test
-    shutil.copy(os.path.join('petri_dish_1.jpg'), os.path.join(imagesforProcessingFolder, 'example1.txt'))
-    shutil.copy(os.path.join('petri_dish_2.jpg'), os.path.join(imagesforProcessingFolder, 'example2.txt'))
-    shutil.copy(os.path.join('petri_dish_3.jpg'), os.path.join(imagesforProcessingFolder, 'example3.txt'))
-    shutil.copy(os.path.join('petri_dish_4.jpg'), os.path.join(imagesforProcessingFolder, 'example4.txt'))
-    shutil.copy(os.path.join('petri_dish_5.jpg'), os.path.join(imagesforProcessingFolder, 'example5.txt'))
-    shutil.copy(os.path.join('petri_dish_6.jpg'), os.path.join(imagesforProcessingFolder, 'example6.txt'))
+    shutil.copy(os.path.join('petri_dish_1.jpg'), os.path.join(imagesforProcessingFolder, 'image1.jpg'))
+    shutil.copy(os.path.join('petri_dish_2.jpg'), os.path.join(imagesforProcessingFolder, 'image2.jpg'))
+    shutil.copy(os.path.join('petri_dish_3.jpg'), os.path.join(imagesforProcessingFolder, 'image3.jpg'))
+    shutil.copy(os.path.join('petri_dish_4.jpg'), os.path.join(imagesforProcessingFolder, 'image4.jpg'))
+    shutil.copy(os.path.join('petri_dish_5.jpg'), os.path.join(imagesforProcessingFolder, 'image5.jpg'))
+    shutil.copy(os.path.join('petri_dish_6.jpg'), os.path.join(imagesforProcessingFolder, 'image6.jpg'))
 
     '''
     #Take Images of Petri Dishes and adds to new fodler
@@ -264,11 +261,19 @@ def main():
     os.makedirs(goodColoniesFolder)
 
     #create a folder where all corddinates will be placed
-    allColoniesFolder = "allColonies"
-    os.makedirs(allColoniesFolder)
+    #allColoniesFolder = "allColonies"
+    #os.makedirs(allColoniesFolder)
 
     #call image processing using the folder created
-    cpr.process_petri_dish_image(imagesforProcessingFolder='./images/', goodColoniesFolder='./good_colony_coords/', allColoniesFolder='./yolo_dump/')
+    #cpr.process_petri_dish_image(image_folder_path=imagesforProcessingFolder, good_colony_coord_output_path=goodColoniesFolder)
+    #Manually addnig text files for test
+    shutil.copy(os.path.join('example1.txt'), os.path.join(goodColoniesFolder, 'example1.txt'))
+    shutil.copy(os.path.join('example2.txt'), os.path.join(goodColoniesFolder, 'example2.txt'))
+    shutil.copy(os.path.join('example3.txt'), os.path.join(goodColoniesFolder, 'example3.txt'))
+    shutil.copy(os.path.join('example4.txt'), os.path.join(goodColoniesFolder, 'example4.txt'))
+    shutil.copy(os.path.join('example5.txt'), os.path.join(goodColoniesFolder, 'example5.txt'))
+    shutil.copy(os.path.join('example6.txt'), os.path.join(goodColoniesFolder, 'example6.txt'))
+
 
     #Randomize and select 96 colonies using images from new folder
     coloniesToSample =CPR_random.randomize(goodColoniesFolder)   
@@ -281,7 +286,7 @@ def main():
     cpr.create_metadata(imagesforProcessingFolder='./images/', goodColoniesFolder='./good_colony_coords/', create_petri_dish_view=True, create_colony_view= True)
 
     #currently deleting the file after execution- will need to delete end of program
-    shutil.rmtree(sampledColoniesFolder)  
+    #shutil.rmtree(sampledColoniesFolder)  
     shutil.rmtree(imagesforProcessingFolder)
     #shutil.rmtree(photosFolder)
     

@@ -1,29 +1,12 @@
 import random
 import os, glob
-import shutil
 from msilib.schema import _Validation_records
 import cv2 as cv
 import numpy as np
 from dataclasses import dataclass
 import CPR_tools as cpr
 
-
-#Takes photos x amount of petri dishes (user specified) and saves to new folder
-def takePhotos(folder_path, numPetriDishes):
-    petriLocations = [[66.11, 62.57], [66.11, -58.08], [180.41, 62.57], 
-                      [180.41, -58.08], [294.71, 62.57], [409.01, 62.57]]
-    petriCounter = 0
-    for i in range(1, numPetriDishes + 1):
-        #move to petriLocations[petriCounter]
-        result, image = cam.read()
-        print("----------IMAGE TAKEN----------")
-        if result:
-            imgName = f"petri_dish_{i}.jpg"
-            cv.imwrite(imgName, image)
-            img_path_to_save = os.path.join(folder_path, imgName)
-            shutil.move(imgName, img_path_to_save)
-        petriCounter = petriCounter + 1
-    cam.release()
+sampledColoniesFolder = "sampleColonies"
 
 #Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files
 def randomize(folder_path):
