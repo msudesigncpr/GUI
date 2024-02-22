@@ -281,8 +281,10 @@ def main():
     cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
 
     #currently deleting the file after execution- will need to delete end of program
-    #shutil.rmtree(sampledColoniesFolder)  
+    shutil.rmtree('goodColonies')  
     shutil.rmtree(imagesforProcessingFolder)
-    #shutil.rmtree(photosFolder)
+    shutil.rmtree('runs')
+    shutil.rmtree('sampleColonies')
+    shutil.rmtree('yolo_dump')
     
 main()
