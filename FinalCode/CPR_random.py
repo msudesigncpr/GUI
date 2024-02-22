@@ -249,7 +249,7 @@ def randomize(folder_path):
 
     wellLocationCount = -1
     sampleColonies1Line = [sublist[0:6] for sublist in P1coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "petri1.txt")
+    file_path = os.path.join(sampledColoniesFolder, "image1.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies1Line:
             wellLocationCount = wellLocationCount + 1
@@ -258,7 +258,7 @@ def randomize(folder_path):
 
 
     sampleColonies2Line = [sublist[0:6] for sublist in P2coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "petri2.txt")
+    file_path = os.path.join(sampledColoniesFolder, "image2.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies2Line:
             wellLocationCount = wellLocationCount + 1
@@ -266,7 +266,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies3Line = [sublist[0:6] for sublist in P3coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "petri3.txt")
+    file_path = os.path.join(sampledColoniesFolder, "image3.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies3Line:
             wellLocationCount = wellLocationCount + 1
@@ -274,7 +274,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies4Line = [sublist[0:6] for sublist in P4coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "petri4.txt")
+    file_path = os.path.join(sampledColoniesFolder, "image4.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies4Line:
             wellLocationCount = wellLocationCount + 1
@@ -282,7 +282,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies5Line = [sublist[0:6] for sublist in P5coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "petri5.txt")
+    file_path = os.path.join(sampledColoniesFolder, "image5.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies5Line:
             wellLocationCount = wellLocationCount + 1
@@ -290,7 +290,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies6Line = [sublist[0:6] for sublist in P6coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "petri6.txt")
+    file_path = os.path.join(sampledColoniesFolder, "image6.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies6Line:
             wellLocationCount = wellLocationCount + 1
