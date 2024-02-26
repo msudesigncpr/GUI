@@ -11,11 +11,15 @@ import json
 import csv
 import logging
 import time
-from dataclasses import dataclass
-from libmotorctrl import DriveOverseer, DriveTarget
+#from dataclasses import dataclass
+#from libmotorctrl import DriveOverseer, DriveTarget
+#from constants import *
 import CPR_tools as cpr
 import CPR_random
-import CPRmotorctrl
+#import CPRmotorctrl
+import asyncio
+import sys
+
 
 #Set up the camera
 cam_port = 0
@@ -44,48 +48,45 @@ def takePhotos(folder_path, numPetriDishes):
     cam.release()
 
 def main():
+    #drive_ctrl = DriveManager()
+    
     #Home
+    #CPRmotorctrl.home()
 
     #Create a new folder for were photos will go
     imagesforProcessingFolder = "baseplatePhotos"
     os.makedirs(imagesforProcessingFolder)
 
-     #Manually addnig photos for test
-    shutil.copy(os.path.join('petri_dish_1.jpg'), os.path.join(imagesforProcessingFolder, 'image1.jpg'))
-    shutil.copy(os.path.join('petri_dish_2.jpg'), os.path.join(imagesforProcessingFolder, 'image2.jpg'))
-    shutil.copy(os.path.join('petri_dish_3.jpg'), os.path.join(imagesforProcessingFolder, 'image3.jpg'))
-    shutil.copy(os.path.join('petri_dish_4.jpg'), os.path.join(imagesforProcessingFolder, 'image4.jpg'))
-    shutil.copy(os.path.join('petri_dish_5.jpg'), os.path.join(imagesforProcessingFolder, 'image5.jpg'))
-    shutil.copy(os.path.join('petri_dish_6.jpg'), os.path.join(imagesforProcessingFolder, 'image6.jpg'))
+    #TEMP: Manually addnig photos for test
+    shutil.copy(os.path.join('image1.jpg'), os.path.join(imagesforProcessingFolder, 'image1.jpg'))
+    shutil.copy(os.path.join('image2.jpg'), os.path.join(imagesforProcessingFolder, 'image2.jpg'))
+    shutil.copy(os.path.join('image3.jpg'), os.path.join(imagesforProcessingFolder, 'image3.jpg'))
+    shutil.copy(os.path.join('image4.jpg'), os.path.join(imagesforProcessingFolder, 'image4.jpg'))
+    shutil.copy(os.path.join('image5.jpg'), os.path.join(imagesforProcessingFolder, 'image5.jpg'))
+    shutil.copy(os.path.join('image6.jpg'), os.path.join(imagesforProcessingFolder, 'image6.jpg'))
     
-    #Take Images of Petri Dishes and adds to new fodler
-    tempFolder = "tempPhotos"
-    os.makedirs(tempFolder)
+    #Take Images of Petri Dishes
     numPetriDishes = 6  #TODO this should come from GUI
-    takePhotos(tempFolder, numPetriDishes)    #TODO will need to incorporate motor controls
-
-    #create a folder where text files of good corddinates will be placed
-    goodColoniesFolder = "goodColonies"
-    os.makedirs(goodColoniesFolder)
-
-    #create a folder where all corddinates will be placed
-    #allColoniesFolder = "allColonies"
-    #os.makedirs(allColoniesFolder)
+    #takePhotos(imagesforProcessingFolder, numPetriDishes)    #TODO will need to incorporate motor controls
 
     #call image processing using the folder created
+    goodColoniesFolder = "goodColonies"
+    os.makedirs(goodColoniesFolder)
     cpr.process_petri_dish_image(image_folder_path=imagesforProcessingFolder, good_colony_coord_output_path=goodColoniesFolder)
    
     #Randomize and select 96 colonies using images from new folder *produces sampledColoniesFolder
-    coloniesToSample =CPR_random.randomize(goodColoniesFolder)   
+    coloniesToSample =CPR_random.randomize(goodColoniesFolder)  
+    print(coloniesToSample) 
     
-    #GO toeach colony, deposit, steralize needle
+    #Execute tool path
     dwell_duration = 5 # TODO input from GUI
-    CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration)
+    #CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration)
 
-    #call image meta data with the file created above
+    #callimage meta data with the images and colonies
     cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
 
     #currently deleting the file after execution- will need to delete end of program
+    #TODO place metadata into other folder/ access for user
     shutil.rmtree('goodColonies')  
     shutil.rmtree(imagesforProcessingFolder)
     shutil.rmtree('runs')
