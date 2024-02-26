@@ -317,56 +317,62 @@ def randomize(folder_path):
     for sublist in totalList1:
         x = float(sublist[0])
         x = x * xScale
+        x = x + 66.11
         sublist[0] = x
         y = float(sublist[1])
         y = y * yScale
+        y = y + 62.57
         sublist[1] = y
 
 
     for sublist in totalList2:
         x = float(sublist[0])
         x = x * xScale
+        x = x + 66.11
         sublist[0] = x
         y = float(sublist[1])
         y = y * yScale
-        y = y + 10.0
+        y = y - 58.08        #TODO change to microns for final
         sublist[1] = y
 
 
     for sublist in totalList3:
         x = float(sublist[0])
         x = x * xScale
-        x = x + 12.0
+        x = x + 180.41
         sublist[0] = x
         y = float(sublist[1])
         y = y * yScale
+        y = y + 62.57
         sublist[1] = y
 
     for sublist in totalList4:
         x = float(sublist[0])
         x = x * xScale
-        x = x + 12.0
+        x = x + 180.41
         sublist[0] = x
         y = float(sublist[1])
         y = y * yScale
-        y = y + 10.0
+        y = y - 58.08
         sublist[1] = y
 
     for sublist in totalList5:
         x = float(sublist[0])
         x = x * xScale
-        x = x + 23.0
+        x = x + 294.71
         sublist[0] = x
         y = float(sublist[1])
+        y = y + 62.57
         y = y * yScale
         sublist[1] = y
 
     for sublist in totalList6:
         x = float(sublist[0])
         x = x * xScale
-        x += 34.0
+        x = x + 409.01
         sublist[0] = x
         y = float(sublist[1])
+        y = y + 62.57
         y = y * yScale
         sublist[1] = y
     
