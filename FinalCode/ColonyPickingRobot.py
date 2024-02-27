@@ -1,57 +1,22 @@
-import random
 import os, glob
 import shutil
-from msilib.schema import _Validation_records
-import cv2 as cv
-import numpy as np
-import openpyxl
-import time
-import threading
-import json
-import csv
-import logging
-import time
-#from dataclasses import dataclass
 #from libmotorctrl import DriveOverseer, DriveTarget
-#from constants import *
 import CPR_tools as cpr
 import CPR_random
 #import CPRmotorctrl
-import asyncio
-import sys
+#from constants import *
 
-
-#Set up the camera
-cam_port = 0
-cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
-cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)          #set frame width (max res from data sheet)
-cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2558)          #set frame heigh (max res from data sheet)
-
-
-petriCamLocations = [[66.11, 62.57], [66.11, -58.08], [180.41, 62.57], 
-                      [180.41, -58.08], [294.71, 62.57], [409.01, 62.57]]
-
-
-#Takes photos x amount of petri dishes (user specified) and saves to new folder
-def takePhotos(folder_path, numPetriDishes):
-    petriCounter = 0
-    for i in range(1, numPetriDishes + 1):
-        #move to petriLocations[petriCounter] to petriCamLocations[i]
-        result, image = cam.read()
-        print("----------IMAGE TAKEN----------")
-        if result:
-            imgName = f"petri_dish_{i}.jpg"
-            cv.imwrite(imgName, image)
-            img_path_to_save = os.path.join(folder_path, imgName)
-            shutil.move(imgName, img_path_to_save)
-        petriCounter = petriCounter + 1
-    cam.release()
 
 def main():
     #drive_ctrl = DriveManager()
     
     #Home
     #CPRmotorctrl.home()
+
+    #apply any offset
+    #move to pinhole
+    #take an image
+    #cpr.pinhole('./pinhole_test_images/pinhole_lights_on.jpg', save_image_path= './pinhole_test.jpg', row_deviation_threshold=.1, column_deviation_threshold=.1, center_point=(0.5, 0.48))
 
     #Create a new folder for were photos will go
     imagesforProcessingFolder = "baseplatePhotos"
@@ -67,7 +32,7 @@ def main():
     
     #Take Images of Petri Dishes
     numPetriDishes = 6  #TODO this should come from GUI
-    #takePhotos(imagesforProcessingFolder, numPetriDishes)    #TODO will need to incorporate motor controls
+    #CPRmotorctrl.takePhotos(imagesforProcessingFolder, numPetriDishes, drive_ctrl)    #TODO will need to incorporate motor controls
 
     #call image processing using the folder created
     goodColoniesFolder = "goodColonies"
@@ -80,11 +45,10 @@ def main():
     
     #Execute tool path
     dwell_duration = 5 # TODO input from GUI
-    #CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration)
+    #CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration) TODO double check right
 
     #callimage meta data with the images and colonies
     cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
-
     #currently deleting the file after execution- will need to delete end of program
     #TODO place metadata into other folder/ access for user
     shutil.rmtree('goodColonies')  

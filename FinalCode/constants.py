@@ -5,6 +5,8 @@ PETRI_DISH_DEPTH = 80_000  # Micrometers # TODO Check depth
 WELL_DEPTH = 80_000  # Micrometers # TODO Check depth
 CAMERA_POS_OFFSET = 20  # Micrometers # TODO Find real value
 
+PETRICAMLOCATION = [[66.11, 62.57], [66.11, -58.08], [180.41, 62.57], 
+                      [180.41, -58.08], [294.71, 62.57], [409.01, 62.57]]
 
 @dataclass
 class Colony:

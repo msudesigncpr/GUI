@@ -5,6 +5,9 @@ import logging
 import sys
 from libmotorctrl import DriveManager, DriveTarget
 from constants import *
+import cv2 as cv
+import shutil
+import os, glob
 
 LOGLEVEL = logging.INFO
 
@@ -14,6 +17,13 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
+#Set up the camera
+cam_port = 0
+cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
+cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)          #set frame width (max res from data sheet)
+cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2558)          #set frame heigh (max res from data sheet)
+
+
 async def home(drive_ctrl):
     await drive_ctrl.init_drives()
     logging.info("Drives initialized")
@@ -22,6 +32,24 @@ async def home(drive_ctrl):
     await drive_ctrl.home(DriveTarget.DriveX)
     await drive_ctrl.home(DriveTarget.DriveY)
     logging.info("Homing complete")
+
+#Takes photos x amount of petri dishes (user specified) and saves to new folder
+async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
+    i = 0
+    logging.info("Starting taking images cycle...")
+    for petri in PETRICAMLOCATION:
+        if(i < numPetriDishes):
+            await drive_ctrl.move(int(petri[0] * 10**3), int(petri[1] * 10**3), 0)
+            result, image = cam.read()
+            logging.info(f"Image{i} taken at location of Petri dish {i}")
+            if result:
+                imgName = f"image{i}.jpg"
+                cv.imwrite(imgName, image)
+                img_path_to_save = os.path.join(folder_path, imgName)
+                shutil.move(imgName, img_path_to_save)
+            i += 1
+    cam.release()
+
 
 async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
     target_colonies = []
