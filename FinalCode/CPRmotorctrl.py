@@ -1,10 +1,10 @@
 
 import asyncio
-import json
 import logging
 import sys
 from libmotorctrl import DriveManager, DriveTarget
 from constants import *
+
 
 LOGLEVEL = logging.INFO
 
@@ -14,8 +14,7 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
-async def home():
-    drive_ctrl = DriveManager()
+async def home(drive_ctrl):
     await drive_ctrl.init_drives()
     logging.info("Drives initialized")
 
@@ -24,14 +23,8 @@ async def home():
     await drive_ctrl.home(DriveTarget.DriveY)
     logging.info("Homing complete")
 
-async def executeToolPath(raw_colony_list, dwell_duration):
-    drive_ctrl = DriveManager()
-    await drive_ctrl.init_drives()
-    logging.info("Drives initialized")
 
-    with open("data.json", "r") as colony_file:
-        valid_colonies_raw = json.load(colony_file)
-
+async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
     target_colonies = []
     for colony in valid_colonies_raw:
         target_colonies.append(Colony(dish="P0", x=colony[0], y=colony[1]))

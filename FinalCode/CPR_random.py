@@ -384,5 +384,5 @@ def randomize(folder_path):
     totalList.extend(totalList5)
     totalList.extend(totalList6)
 
-    #print(totalList)
+    print(totalList)
     return(totalList)
