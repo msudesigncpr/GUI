@@ -4,6 +4,9 @@ STERILIZER_COORDINATES = (461_330, 87_950, 60_000)  # Micrometers  # TODO
 PETRI_DISH_DEPTH = 80_000  # Micrometers # TODO Check depth
 WELL_DEPTH = 80_000  # Micrometers # TODO Check depth
 CAMERA_POS_OFFSET = 20  # Micrometers # TODO Find real value
+IMAGE_COORDINATES = [[66.11, 62.57], [66.11, -58.08], [180.41, 62.57], 
+                      [180.41, -58.08], [294.71, -58.08], [409.01, -58.08]]
+
 
 
 @dataclass

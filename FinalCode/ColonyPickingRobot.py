@@ -18,40 +18,17 @@ import CPRmotorctrl
 import asyncio
 from libmotorctrl import DriveManager, DriveTarget
 
-#Set up the camera
-cam_port = 0
-cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
-cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)          #set frame width (max res from data sheet)
-cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2558)          #set frame heigh (max res from data sheet)
-
-
-petriCamLocations = [[66.11, 62.57], [66.11, -58.08], [180.41, 62.57], 
-                      [180.41, -58.08], [294.71, 62.57], [409.01, 62.57]]
-
-
-#Takes photos x amount of petri dishes (user specified) and saves to new folder
-def takePhotos(folder_path, numPetriDishes):
-    petriCounter = 0
-    for i in range(1, numPetriDishes + 1):
-        #move to petriLocations[petriCounter] to petriCamLocations[i]
-        result, image = cam.read()
-        print("----------IMAGE TAKEN----------")
-        if result:
-            imgName = f"petri_dish_{i}.jpg"
-            cv.imwrite(imgName, image)
-            img_path_to_save = os.path.join(folder_path, imgName)
-            shutil.move(imgName, img_path_to_save)
-        petriCounter = petriCounter + 1
-    cam.release()
 
 def main():
-    #Home
     drive_ctrl = DriveManager()
+
+    #Home
     print("---HOMING---")
     asyncio.run(CPRmotorctrl.home(drive_ctrl))
     print("---DONE HOMING---")
 
     #Create a new folder for were photos will go
+    print("starting image cycling")
     imagesforProcessingFolder = "baseplatePhotos"
     os.makedirs(imagesforProcessingFolder)
 
@@ -67,7 +44,7 @@ def main():
     tempFolder = "tempPhotos"
     os.makedirs(tempFolder)
     numPetriDishes = 6  #TODO this should come from GUI
-    takePhotos(tempFolder, numPetriDishes)    #TODO will need to incorporate motor controls
+    asyncio.run(CPRmotorctrl.takePhotos(tempFolder, numPetriDishes, drive_ctrl))    #TODO will need to incorporate motor controls
 
     #create a folder where text files of good corddinates will be placed
     goodColoniesFolder = "goodColonies"
