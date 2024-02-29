@@ -22,17 +22,33 @@ from libmotorctrl import DriveManager, DriveTarget
 def main():
     drive_ctrl = DriveManager()
 
+    #TODO delete temp folder when all running
+    tempFolder = "tempPhotos"
+    os.makedirs(tempFolder)
+
     #Home
     print("---HOMING---")
     asyncio.run(CPRmotorctrl.home(drive_ctrl))
     print("---DONE HOMING---")
 
+    #Image pinhole
+    print("Starting pinhole cycle")
+    pinHole = "pinHolePhoto"
+    os.makedirs(pinHole)
+    shutil.copy(os.path.join('pinhole.jpg'), os.path.join(pinHole, 'pinhole.jpg'))  #TODO delte this after running with real photo
+    asyncio.run(CPRmotorctrl.pinhole(drive_ctrl, tempFolder))  #TODO change this out of the temp folder to pinhole folder
+    diviation = cpr.pinhole('./pinHolePhoto/pinhole.jpg', save_image_path= './pinHolePhoto/pinhole.jpg', row_deviation_threshold=.1, column_deviation_threshold=.1, center_point=(0.5, 0.48))
+    if(diviation[0] != 1 and diviation[1] != 1):
+        offsetX = diviation[0]
+        offsetY = diviation[1]
+        print("applying offset")
+        #TODO setcalibration offset
+
     #Create a new folder for were photos will go
     print("starting image cycling")
     imagesforProcessingFolder = "baseplatePhotos"
     os.makedirs(imagesforProcessingFolder)
-
-     #Manually addnig photos for test
+    #TODO delte when no longer using test images
     shutil.copy(os.path.join('image1.jpg'), os.path.join(imagesforProcessingFolder, 'image1.jpg'))
     shutil.copy(os.path.join('image2.jpg'), os.path.join(imagesforProcessingFolder, 'image2.jpg'))
     shutil.copy(os.path.join('image3.jpg'), os.path.join(imagesforProcessingFolder, 'image3.jpg'))
@@ -40,11 +56,10 @@ def main():
     shutil.copy(os.path.join('image5.jpg'), os.path.join(imagesforProcessingFolder, 'image5.jpg'))
     shutil.copy(os.path.join('image6.jpg'), os.path.join(imagesforProcessingFolder, 'image6.jpg'))
     
+
     #Take Images of Petri Dishes and adds to new fodler
-    tempFolder = "tempPhotos"
-    os.makedirs(tempFolder)
     numPetriDishes = 6  #TODO this should come from GUI
-    asyncio.run(CPRmotorctrl.takePhotos(tempFolder, numPetriDishes, drive_ctrl))    #TODO will need to incorporate motor controls
+    asyncio.run(CPRmotorctrl.takePhotos(tempFolder, numPetriDishes, drive_ctrl))    #TODO will need to change tempFOlder to
 
     #create a folder where text files of good corddinates will be placed
     goodColoniesFolder = "goodColonies"
@@ -60,12 +75,12 @@ def main():
     #Randomize and select 96 colonies using images from new folder *produces sampledColoniesFolder
     coloniesToSample =CPR_random.randomize(goodColoniesFolder)   
     
+    #call image meta data with the file created above
+    cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
+
     #GO toeach colony, deposit, steralize needle
     dwell_duration = 5 # TODO input from GUI
     asyncio.run(CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration, drive_ctrl))
-
-    #call image meta data with the file created above
-    cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
 
     #currently deleting the file after execution- will need to delete end of program
     shutil.rmtree('goodColonies')  

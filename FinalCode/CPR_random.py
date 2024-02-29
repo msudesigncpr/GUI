@@ -362,8 +362,8 @@ def randomize(folder_path):
         x = x + 294.71
         sublist[0] = x
         y = float(sublist[1])
-        y = y + 62.57
         y = y * yScale
+        y = y + 62.57
         sublist[1] = y
 
     for sublist in totalList6:
@@ -372,8 +372,8 @@ def randomize(folder_path):
         x = x + 409.01
         sublist[0] = x
         y = float(sublist[1])
-        y = y + 62.57
         y = y * yScale
+        y = y + 62.57
         sublist[1] = y
     
 
@@ -384,5 +384,5 @@ def randomize(folder_path):
     totalList.extend(totalList5)
     totalList.extend(totalList6)
 
-    print(totalList)
+    print(totalList)    #TODO shouldnt have to print all the time
     return(totalList)

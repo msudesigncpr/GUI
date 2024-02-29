@@ -34,6 +34,16 @@ async def home(drive_ctrl):
     await drive_ctrl.home(DriveTarget.DriveY)
     logging.info("Homing complete")
 
+#Take a picture of pin hole at desired location
+async def pinhole(drive_ctrl, folder_path):
+    await drive_ctrl.move(60 * 10**3, 0, 0)  #TODO is this baseplate 0,0 or arm 0,0?
+    result, image = cam.read()
+    if result:
+        imgName = f"pinhole.jpg"
+        cv.imwrite(imgName, image)
+        img_path_to_save = os.path.join(folder_path, imgName)
+        shutil.move(imgName, img_path_to_save)
+
 #Takes photos x amount of petri dishes (user specified) and saves to new folder
 async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
     i = 0
