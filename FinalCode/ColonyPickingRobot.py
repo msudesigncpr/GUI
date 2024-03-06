@@ -10,6 +10,7 @@ import threading
 import json
 import csv
 import logging
+'''
 import time
 from dataclasses import dataclass
 import CPR_tools as cpr
@@ -17,16 +18,26 @@ import CPR_random
 import CPRmotorctrl
 import asyncio
 from libmotorctrl import DriveManager, DriveTarget
-
+'''
+import tkinter as tk
+from tkinter import ttk
+import pages
 
 def main():
-    drive_ctrl = DriveManager()
+    #Start GUI
+    app = pages.tkinterApp()
+    #names, dwell, num = app.mainloop()
+    app.mainloop()
+    runName, names, dwell, num = app.returnValues()
+    print(runName, names, dwell, num)
+    '''
 
     #TODO delete temp folder when all running
     tempFolder = "tempPhotos"
     os.makedirs(tempFolder)
 
-    #Home
+    #Home and setup drive manager
+    drive_ctrl = DriveManager()
     print("---HOMING---")
     asyncio.run(CPRmotorctrl.home(drive_ctrl))
     print("---DONE HOMING---")
@@ -88,5 +99,6 @@ def main():
     shutil.rmtree('runs')
     shutil.rmtree('sampleColonies')
     shutil.rmtree('yolo_dump')
+    '''
     
 main()
