@@ -169,8 +169,6 @@ def randomize(folder_path):
     sampleLengthSet = {i: sampleLengthSet[i] for i in mySampleKeys}
     largestSampleSet = list(sampleLengthSet)[-1]       #get the last key
     largestSampleName = sampleLengthSet[largestSampleSet]
-    print(f"Largest Petri dish will sample {largestSampleName} as: " + str(largestSampleSet))
-
 
     sampledColoniesLength = P1SampleLength + P2SampleLength + P3SampleLength + P4SampleLength + P5SampleLength + P6SampleLength
     if(sampledColoniesLength > 96):
@@ -185,8 +183,6 @@ def randomize(folder_path):
         if(largestNumber > largestSampleSet):
             largestSampleSet = largestSampleSet + add
         print(f"largest sample must add {add} colonies")    
-
-    print("Sampled colonies in set: " + str(sampledColoniesLength))
 
     #need the largest one to work
     petri1 = 0
@@ -249,7 +245,7 @@ def randomize(folder_path):
 
     wellLocationCount = -1
     sampleColonies1Line = [sublist[0:6] for sublist in P1coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image1.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_0.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies1Line:
             wellLocationCount = wellLocationCount + 1
@@ -258,7 +254,7 @@ def randomize(folder_path):
 
 
     sampleColonies2Line = [sublist[0:6] for sublist in P2coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image2.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_1.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies2Line:
             wellLocationCount = wellLocationCount + 1
@@ -266,7 +262,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies3Line = [sublist[0:6] for sublist in P3coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image3.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_2.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies3Line:
             wellLocationCount = wellLocationCount + 1
@@ -274,7 +270,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies4Line = [sublist[0:6] for sublist in P4coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image4.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_3.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies4Line:
             wellLocationCount = wellLocationCount + 1
@@ -282,7 +278,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies5Line = [sublist[0:6] for sublist in P5coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image5.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_4.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies5Line:
             wellLocationCount = wellLocationCount + 1
@@ -290,7 +286,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies6Line = [sublist[0:6] for sublist in P6coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image6.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_5.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies6Line:
             wellLocationCount = wellLocationCount + 1
@@ -328,11 +324,11 @@ def randomize(folder_path):
     for sublist in totalList2:
         x = float(sublist[0])
         x = x * xScale
-        x = x + 66.11
+        x = x + 56.37
         sublist[0] = x
         y = float(sublist[1])
         y = y * yScale
-        y = y - 58.08        #TODO change to microns for final
+        y = y - 48.32        #TODO change to microns for final
         sublist[1] = y
 
 

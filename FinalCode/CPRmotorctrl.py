@@ -8,27 +8,29 @@ import cv2 as cv
 import numpy as np
 import os, glob
 import shutil
+import time
 
-
-LOGLEVEL = logging.INFO
-
-#Set up the camera
 cam_port = 0
 cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
 cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)          #set frame width (max res from data sheet)
-cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2558)          #set frame heigh (max res from data sheet)
+cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2448)          #set frame heigh (max res from data sheet)
 
+LOGLEVEL = logging.INFO
 
 logging.basicConfig(
-    format="%(asctime)s: %(threadName)s: %(message)s",
+    format="%(asctime)s: %(message)s",
     level=LOGLEVEL,
     datefmt="%H:%M:%S",
 )
 
+#TODO delete when no longer manually setting calibration offset
+def calibrate(drive_ctrl, x, y):
+    drive_ctrl.set_calibration_offset(x, y)
+
+#home motors
 async def home(drive_ctrl):
     await drive_ctrl.init_drives()
     logging.info("Drives initialized")
-
     await drive_ctrl.home(DriveTarget.DriveZ)
     await drive_ctrl.home(DriveTarget.DriveX)
     await drive_ctrl.home(DriveTarget.DriveY)
@@ -36,28 +38,49 @@ async def home(drive_ctrl):
 
 #Take a picture of pin hole at desired location
 async def pinhole(drive_ctrl, folder_path):
-    await drive_ctrl.move(60 * 10**3, 0, 0)  #TODO is this baseplate 0,0 or arm 0,0?
+    await drive_ctrl.move(
+        (PINHOLE_COORDINATES[0] * 10**3),
+        (PINHOLE_COORDINATES[1] * 10**3),
+        (PINHOLE_COORDINATES[2] * 10**3),
+    )
+
+    # HACK We call `cam.read()` unnecessarily
+    # It is necessary to call `cam.read()` (discarding the result), and
+    # then call `cam.read()` to get the correct image.
+    # Also present in `takePhotos()`.
+    # - Will
+    cam.read()
     result, image = cam.read()
+    print("----------PINHOLE IMAGE TAKEN ----------")
     if result:
-        imgName = f"pinhole.jpg"
+        imgName = "pinhole_for_testing.jpg"
         cv.imwrite(imgName, image)
         img_path_to_save = os.path.join(folder_path, imgName)
         shutil.move(imgName, img_path_to_save)
+    else:
+        logging.error("Invalid image capture result")
 
+    
 #Takes photos x amount of petri dishes (user specified) and saves to new folder
 async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
     i = 0
     logging.info("Starting receiving images of Petri dishes...")
     for petri in IMAGE_COORDINATES:
         if(i < numPetriDishes):
-            await drive_ctrl.move(int(petri[0] * 10**3), int(petri[1] * 10**3), CAMERA_POS_OFFSET)
+            await drive_ctrl.move(int(petri[0] * 10**3), 
+                            int(petri[1] * 10**3), 
+                            CAMERA_POS_OFFSET * 10**3)
+            logging.info("!!MOTION COMPLETE!!")
+            cam.read() # HACK (See note above)
             result, image = cam.read()
-            print("----------IMAGE TAKEN----------")
+            print(f"----------IMAGE{i} TAKEN----------")
             if result:
                 imgName = f"petri_dish_{i}.jpg"
                 cv.imwrite(imgName, image)
                 img_path_to_save = os.path.join(folder_path, imgName)
                 shutil.move(imgName, img_path_to_save)
+            else:
+                logging.error("Invalid image capture result!")
             i += 1
     cam.release()
 
@@ -72,9 +95,9 @@ async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
 
     logging.info("Performing initial sterilization...")
     await drive_ctrl.move(
-        STERILIZER_COORDINATES[0],
-        STERILIZER_COORDINATES[1],
-        STERILIZER_COORDINATES[2],
+        (STERILIZER_COORDINATES[0] * 10**3),
+        (STERILIZER_COORDINATES[1] * 10**3),
+        (STERILIZER_COORDINATES[2] * 10**3),
     )
     logging.info("Sleeping for %s seconds...", dwell_duration)
     await asyncio.sleep(dwell_duration)
@@ -96,19 +119,19 @@ async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
             sys.exit(1)
         # Target well has been found, execute sampling run
         await drive_ctrl.move(
-            int(colony.x * 10**3), int(colony.y * 10**3), PETRI_DISH_DEPTH
+            int(colony.x * 10**3), int(colony.y * 10**3), (PETRI_DISH_DEPTH * 10**3)
         )
         logging.info("Colony collected, moving to well...")
         await drive_ctrl.move(
-            int(well_target.x * 10**3), int(well_target.y * 10**3), WELL_DEPTH
+            int(well_target.x * 10**3), int(well_target.y * 10**3), (WELL_DEPTH * 10**3)
         )
         logging.info("Well reached, moving to sterilizer...")
         well_target.has_sample = True
         well_target.origin = colony.dish
         await drive_ctrl.move(
-            STERILIZER_COORDINATES[0],
-            STERILIZER_COORDINATES[1],
-            STERILIZER_COORDINATES[2],
+            (STERILIZER_COORDINATES[0] * 10**3),
+            (STERILIZER_COORDINATES[1] * 10**3),
+            (STERILIZER_COORDINATES[2] * 10**3),
         )
         logging.info("Sleeping for %s seconds...", dwell_duration)
         await asyncio.sleep(dwell_duration)
