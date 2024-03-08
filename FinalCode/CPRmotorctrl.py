@@ -116,7 +116,7 @@ async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
                 break
         if well_target is None:
             logging.error("No unused wells!")  # TODO Handle differently
-            sys.exit(1)
+            break
         # Target well has been found, execute sampling run
         await drive_ctrl.move(
             int(colony.x * 10**3), int(colony.y * 10**3), (PETRI_DISH_DEPTH * 10**3)
@@ -137,5 +137,5 @@ async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
         await asyncio.sleep(dwell_duration)
 
     logging.info("Sampling complete!")
-    await drive_ctrl.move(490_000, -90_000, 0)
+    await drive_ctrl.move(485_000, -110_000, 0)
     await drive_ctrl.terminate()
