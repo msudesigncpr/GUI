@@ -1,2 +1,13 @@
-.venv
+*.jpg
+
+.venv*
 __pycache__
+
+/baseplatePhotos
+/goodColonies
+/metadata
+/pinHolePhoto
+/sampleColonies
+/yolo_dump
+
+example*.txt
