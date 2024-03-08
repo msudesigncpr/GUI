@@ -328,52 +328,52 @@ def randomize(folder_path):
     for sublist in totalList1:
         x = float(sublist[0])
         y = float(sublist[1])
-        x = (camPosx1 - (camX/2) + (y*camY))
-        sublist[0] = x
-        y = (camPosy1 - (camY/2) + (x*camX))
-        sublist[1] = y
+        drivex = (camPosx1 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy1 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
 
     for sublist in totalList2:
         x = float(sublist[0])
         y = float(sublist[1])
-        x = (camPosx2 - (camX/2) + (y*camY))
-        sublist[0] = x
-        y = (camPosy2 - (camY/2) + (x*camX))
-        sublist[1] = y
+        drivex = (camPosx2 - (camX/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy2 - (camY/2) + (x*camX))
+        sublist[1] = drivey
 
 
     for sublist in totalList3:
         x = float(sublist[0])
         y = float(sublist[1])
-        x = (camPosx3 - (camX/2) + (y*camY))
-        sublist[0] = x
-        y = (camPosy3 - (camY/2) + (x*camX))
-        sublist[1] = y
+        drivex = (camPosx3 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy3 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
     for sublist in totalList4:
         x = float(sublist[0])
         y = float(sublist[1])
-        x = (camPosx4 - (camX/2) + (y*camY))
-        sublist[0] = x
-        y = (camPosy4 - (camY/2) + (x*camX))
-        sublist[1] = y
+        drivex = (camPosx4 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy4 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
     for sublist in totalList5:
         x = float(sublist[0])
         y = float(sublist[1])
-        x = (camPosx5 - (camX/2) + (y*camY))
-        sublist[0] = x
-        y = (camPosy5 - (camY/2) + (x*camX))
-        sublist[1] = y
+        drivex = (camPosx5 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy5 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
     for sublist in totalList6:
         x = float(sublist[0])
         y = float(sublist[1])
-        x = (camPosx6 - (camX/2) + (y*camY))
-        sublist[0] = x
-        y = (camPosy6 - (camY/2) + (x*camX))
-        sublist[1] = y
+        drivex = (camPosx6 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy6 - (camX/2) + (x*camX))
+        sublist[1] = drivey
     
 
     totalList.extend(totalList1)
