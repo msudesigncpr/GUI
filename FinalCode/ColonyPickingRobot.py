@@ -23,10 +23,10 @@ imagesforProcessingFolder = "baseplatePhotos"
 
 
 def main():
-    tmp_directories = ['goodColonies', imagesforProcessingFolder, 'pinHolePhoto', 'runs', 'sampleColonies', 'yolo_dump']
+    tmp_directories = ['goodColonies', imagesforProcessingFolder, 'pinHolePhoto', 'runs', 'sampleColonies', 'yolo_dump', 'metadata']
     for dir in tmp_directories:
         if os.path.exists(dir) and os.path.isdir(dir):
-            logging.warn("Deleting leftover tmp directory %s (did the last run finish successfully?)", dir)
+            logging.warning("Deleting leftover tmp directory %s (did the last run finish successfully?)", dir)
             shutil.rmtree(dir)
 
     drive_ctrl = DriveManager()

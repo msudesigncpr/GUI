@@ -305,71 +305,74 @@ def randomize(folder_path):
     totalList5 = [sublist[1:3] for sublist in P5coloniesList]
     totalList6 = [sublist[1:3] for sublist in P6coloniesList]
 
-    #do math to the ttoallist
-    #   percentage(0.2) * 3264 *  x length across screen (15.5) / pixels(3264)
+    #percentage(0.2) * 3264 *  x length across screen (15.5) / pixels(3264)
+   # xScale = 130.175
+   # yScale = 117.475
     xScale = 16
     yScale = 12
+    camX = 130.175
+    camY = 117.475
+    camPosx1 = 66
+    camPosy1 = 62
+    camPosx2 = 66
+    camPosy2 = -58
+    camPosx3 = 180
+    camPosy3 = 62
+    camPosx4 = 180
+    camPosy4 = -58
+    camPosx5 = 294
+    camPosy5 = -58
+    camPosx6 = 410
+    camPosy6 = -58
 
     for sublist in totalList1:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 66.11
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
+        x = (camPosx1 - (camX/2) + (y*camY))
+        sublist[0] = x
+        y = (camPosy1 - (camY/2) + (x*camX))
         sublist[1] = y
 
 
     for sublist in totalList2:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 56.37
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y - 48.32        #TODO change to microns for final
+        x = (camPosx2 - (camX/2) + (y*camY))
+        sublist[0] = x
+        y = (camPosy2 - (camY/2) + (x*camX))
         sublist[1] = y
 
 
     for sublist in totalList3:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 180.41
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
+        x = (camPosx3 - (camX/2) + (y*camY))
+        sublist[0] = x
+        y = (camPosy3 - (camY/2) + (x*camX))
         sublist[1] = y
 
     for sublist in totalList4:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 180.41
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y - 58.08
+        x = (camPosx4 - (camX/2) + (y*camY))
+        sublist[0] = x
+        y = (camPosy4 - (camY/2) + (x*camX))
         sublist[1] = y
 
     for sublist in totalList5:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 294.71
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
+        x = (camPosx5 - (camX/2) + (y*camY))
+        sublist[0] = x
+        y = (camPosy5 - (camY/2) + (x*camX))
         sublist[1] = y
 
     for sublist in totalList6:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 409.01
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
+        x = (camPosx6 - (camX/2) + (y*camY))
+        sublist[0] = x
+        y = (camPosy6 - (camY/2) + (x*camX))
         sublist[1] = y
     
 
