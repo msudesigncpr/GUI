@@ -70,7 +70,6 @@ async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
             await drive_ctrl.move(int(petri[0] * 10**3), 
                             int(petri[1] * 10**3), 
                             CAMERA_POS_OFFSET * 10**3)
-            logging.info("!!MOTION COMPLETE!!")
             cam.read() # HACK (See note above)
             result, image = cam.read()
             print(f"----------IMAGE{i} TAKEN----------")
