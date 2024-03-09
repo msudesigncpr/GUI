@@ -39,7 +39,7 @@ async def pinhole_capture(drive_ctrl, folder_path):
     # HACK We call `cam.read()` unnecessarily
     # It is necessary to call `cam.read()` (discarding the result), and
     # then call `cam.read()` to get the correct image.
-    # Also present in `takePhotos()`.
+    # Also present in `take_petri_dish_photos()`.
     # - Will
     cam.read()
     result, image = cam.read()
@@ -54,7 +54,7 @@ async def pinhole_capture(drive_ctrl, folder_path):
 
 
 # Takes photos x amount of petri dishes (user specified) and saves to new folder
-async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
+async def take_petri_dish_photos(folder_path, numPetriDishes, drive_ctrl):
     i = 0
     logging.info("Starting receiving images of Petri dishes...")
     for petri in IMAGE_COORDINATES:
@@ -78,7 +78,7 @@ async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
     cam.release()
 
 
-async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
+async def execute_tool_path(valid_colonies_raw, dwell_duration, drive_ctrl):
     target_colonies = []
     for colony in valid_colonies_raw:
         target_colonies.append(Colony(dish="P0", x=colony[0], y=colony[1]))

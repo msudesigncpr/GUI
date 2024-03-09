@@ -5,7 +5,7 @@ import numpy as np
 from dataclasses import dataclass
 import CPR_tools as cpr
 
-sampledColoniesFolder = "sampleColonies"
+sampledColoniesFolder = "target_colony_list"
 
 
 # Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files

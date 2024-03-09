@@ -3,11 +3,10 @@
 .venv*
 __pycache__
 
-/baseplatePhotos
-/goodColonies
 /metadata
-/pinHolePhoto
-/sampleColonies
-/yolo_dump
-
-example*.txt
+/petri_dish_photos_marked
+/petri_dish_photos_raw
+/pinhole_photo
+/runs
+/target_colony_list
+/valid_colony_list
