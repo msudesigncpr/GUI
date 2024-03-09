@@ -28,18 +28,8 @@ def calibrate(drive_ctrl, x, y):
     drive_ctrl.set_calibration_offset(x, y)
 
 
-# home motors
-async def home(drive_ctrl):
-    await drive_ctrl.init_drives()
-    logging.info("Drives initialized")
-    await drive_ctrl.home(DriveTarget.DriveZ)
-    await drive_ctrl.home(DriveTarget.DriveX)
-    await drive_ctrl.home(DriveTarget.DriveY)
-    logging.info("Homing complete")
-
-
 # Take a picture of pin hole at desired location
-async def pinhole(drive_ctrl, folder_path):
+async def pinhole_capture(drive_ctrl, folder_path):
     await drive_ctrl.move(
         (PINHOLE_COORDINATES[0] * 10**3),
         (PINHOLE_COORDINATES[1] * 10**3),

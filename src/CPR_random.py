@@ -1,6 +1,5 @@
 import random
 import os, glob
-from msilib.schema import _Validation_records
 import cv2 as cv
 import numpy as np
 from dataclasses import dataclass
