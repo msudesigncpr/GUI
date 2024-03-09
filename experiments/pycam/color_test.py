@@ -1,4 +1,3 @@
-
 # Read the template and target images
 # template = cv2.imread('color_board.jpg')
 # target = cv2.imread('color_board.jpg')
@@ -30,7 +29,7 @@ import cv2
 import numpy as np
 from PIL import Image
 
-image = Image.open('color_board.jpg')
+image = Image.open("color_board.jpg")
 width, height = image.size
 # Load image
 
@@ -40,7 +39,7 @@ temp = []
 hexcolpix = []
 for row in range(0, height, 1):
     for col in range(0, width, 1):
-        index = row*width + col
+        index = row * width + col
         temp.append(pixval[index])
     hexcolpix.append(temp)
     temp = []

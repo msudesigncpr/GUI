@@ -1,4 +1,3 @@
-
 import asyncio
 import logging
 import sys
@@ -12,8 +11,8 @@ import time
 
 cam_port = 0
 cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
-cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)          #set frame width (max res from data sheet)
-cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2448)          #set frame heigh (max res from data sheet)
+cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)  # set frame width (max res from data sheet)
+cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2448)  # set frame heigh (max res from data sheet)
 
 LOGLEVEL = logging.INFO
 
@@ -23,11 +22,13 @@ logging.basicConfig(
     datefmt="%H:%M:%S",
 )
 
-#TODO delete when no longer manually setting calibration offset
+
+# TODO delete when no longer manually setting calibration offset
 def calibrate(drive_ctrl, x, y):
     drive_ctrl.set_calibration_offset(x, y)
 
-#home motors
+
+# home motors
 async def home(drive_ctrl):
     await drive_ctrl.init_drives()
     logging.info("Drives initialized")
@@ -36,7 +37,8 @@ async def home(drive_ctrl):
     await drive_ctrl.home(DriveTarget.DriveY)
     logging.info("Homing complete")
 
-#Take a picture of pin hole at desired location
+
+# Take a picture of pin hole at desired location
 async def pinhole(drive_ctrl, folder_path):
     await drive_ctrl.move(
         (PINHOLE_COORDINATES[0] * 10**3),
@@ -60,17 +62,19 @@ async def pinhole(drive_ctrl, folder_path):
     else:
         logging.error("Invalid image capture result")
 
-    
-#Takes photos x amount of petri dishes (user specified) and saves to new folder
+
+# Takes photos x amount of petri dishes (user specified) and saves to new folder
 async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
     i = 0
     logging.info("Starting receiving images of Petri dishes...")
     for petri in IMAGE_COORDINATES:
-        if(i < numPetriDishes):
-            await drive_ctrl.move(int(petri[0] * 10**3), 
-                            int(petri[1] * 10**3), 
-                            CAMERA_POS_OFFSET * 10**3)
-            cam.read() # HACK (See note above)
+        if i < numPetriDishes:
+            await drive_ctrl.move(
+                int(petri[0] * 10**3),
+                int(petri[1] * 10**3),
+                CAMERA_POS_OFFSET * 10**3,
+            )
+            cam.read()  # HACK (See note above)
             result, image = cam.read()
             print(f"----------IMAGE{i} TAKEN----------")
             if result:
@@ -82,6 +86,7 @@ async def takePhotos(folder_path, numPetriDishes, drive_ctrl):
                 logging.error("Invalid image capture result!")
             i += 1
     cam.release()
+
 
 async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
     target_colonies = []
@@ -118,11 +123,15 @@ async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
             break
         # Target well has been found, execute sampling run
         await drive_ctrl.move(
-            int(colony.x * 10**3), int(colony.y * 10**3), (PETRI_DISH_DEPTH * 10**3)
+            int(colony.x * 10**3),
+            int(colony.y * 10**3),
+            (PETRI_DISH_DEPTH * 10**3),
         )
         logging.info("Colony collected, moving to well...")
         await drive_ctrl.move(
-            int(well_target.x * 10**3), int(well_target.y * 10**3), (WELL_DEPTH * 10**3)
+            int(well_target.x * 10**3),
+            int(well_target.y * 10**3),
+            (WELL_DEPTH * 10**3),
         )
         logging.info("Well reached, moving to sterilizer...")
         well_target.has_sample = True
