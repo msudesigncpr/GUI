@@ -59,7 +59,7 @@ async def take_petri_dish_photos(folder_path, numPetriDishes, drive_ctrl):
     logging.info("Starting receiving images of Petri dishes...")
     for petri in IMAGE_COORDINATES:
         if i < numPetriDishes:
-            await drive_ctrl.move(
+            await drive_ctrl.move_direct(
                 int(petri[0] * 10**3),
                 int(petri[1] * 10**3),
                 CAMERA_POS_OFFSET * 10**3,
