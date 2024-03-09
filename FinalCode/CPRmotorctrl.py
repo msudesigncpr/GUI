@@ -136,5 +136,5 @@ async def executeToolPath(valid_colonies_raw, dwell_duration, drive_ctrl):
         await asyncio.sleep(dwell_duration)
 
     logging.info("Sampling complete!")
-    await drive_ctrl.move(485_000, -110_000, 0)
+    await drive_ctrl.move(415_000, -110_000, 0)
     await drive_ctrl.terminate()
