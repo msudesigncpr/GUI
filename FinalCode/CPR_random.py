@@ -169,8 +169,6 @@ def randomize(folder_path):
     sampleLengthSet = {i: sampleLengthSet[i] for i in mySampleKeys}
     largestSampleSet = list(sampleLengthSet)[-1]       #get the last key
     largestSampleName = sampleLengthSet[largestSampleSet]
-    print(f"Largest Petri dish will sample {largestSampleName} as: " + str(largestSampleSet))
-
 
     sampledColoniesLength = P1SampleLength + P2SampleLength + P3SampleLength + P4SampleLength + P5SampleLength + P6SampleLength
     if(sampledColoniesLength > 96):
@@ -185,8 +183,6 @@ def randomize(folder_path):
         if(largestNumber > largestSampleSet):
             largestSampleSet = largestSampleSet + add
         print(f"largest sample must add {add} colonies")    
-
-    print("Sampled colonies in set: " + str(sampledColoniesLength))
 
     #need the largest one to work
     petri1 = 0
@@ -249,7 +245,7 @@ def randomize(folder_path):
 
     wellLocationCount = -1
     sampleColonies1Line = [sublist[0:6] for sublist in P1coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image1.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_0.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies1Line:
             wellLocationCount = wellLocationCount + 1
@@ -258,7 +254,7 @@ def randomize(folder_path):
 
 
     sampleColonies2Line = [sublist[0:6] for sublist in P2coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image2.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_1.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies2Line:
             wellLocationCount = wellLocationCount + 1
@@ -266,7 +262,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies3Line = [sublist[0:6] for sublist in P3coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image3.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_2.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies3Line:
             wellLocationCount = wellLocationCount + 1
@@ -274,7 +270,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies4Line = [sublist[0:6] for sublist in P4coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image4.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_3.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies4Line:
             wellLocationCount = wellLocationCount + 1
@@ -282,7 +278,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies5Line = [sublist[0:6] for sublist in P5coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image5.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_4.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies5Line:
             wellLocationCount = wellLocationCount + 1
@@ -290,7 +286,7 @@ def randomize(folder_path):
             file.write(' ' + WellLocations[wellLocationCount] + '\n')
 
     sampleColonies6Line = [sublist[0:6] for sublist in P6coloniesList]
-    file_path = os.path.join(sampledColoniesFolder, "image6.txt")
+    file_path = os.path.join(sampledColoniesFolder, "petri_dish_5.txt")
     with open(file_path, "w") as file:
         for line in sampleColonies6Line:
             wellLocationCount = wellLocationCount + 1
@@ -309,72 +305,75 @@ def randomize(folder_path):
     totalList5 = [sublist[1:3] for sublist in P5coloniesList]
     totalList6 = [sublist[1:3] for sublist in P6coloniesList]
 
-    #do math to the ttoallist
-    #   percentage(0.2) * 3264 *  x length across screen (15.5) / pixels(3264)
+    #percentage(0.2) * 3264 *  x length across screen (15.5) / pixels(3264)
+   # xScale = 130.175
+   # yScale = 117.475
     xScale = 16
     yScale = 12
+    camX = 130.175
+    camY = 117.475
+    camPosx1 = 66
+    camPosy1 = 62
+    camPosx2 = 66
+    camPosy2 = -58
+    camPosx3 = 180
+    camPosy3 = 62
+    camPosx4 = 180
+    camPosy4 = -58
+    camPosx5 = 294
+    camPosy5 = -58
+    camPosx6 = 410
+    camPosy6 = -58
 
     for sublist in totalList1:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 66.11
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
-        sublist[1] = y
+        drivex = (camPosx1 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy1 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
 
     for sublist in totalList2:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 66.11
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y - 58.08        #TODO change to microns for final
-        sublist[1] = y
+        drivex = (camPosx2 - (camX/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy2 - (camY/2) + (x*camX))
+        sublist[1] = drivey
 
 
     for sublist in totalList3:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 180.41
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
-        sublist[1] = y
+        drivex = (camPosx3 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy3 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
     for sublist in totalList4:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 180.41
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y - 58.08
-        sublist[1] = y
+        drivex = (camPosx4 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy4 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
     for sublist in totalList5:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 294.71
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
-        sublist[1] = y
+        drivex = (camPosx5 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy5 - (camX/2) + (x*camX))
+        sublist[1] = drivey
 
     for sublist in totalList6:
         x = float(sublist[0])
-        x = x * xScale
-        x = x + 409.01
-        sublist[0] = x
         y = float(sublist[1])
-        y = y * yScale
-        y = y + 62.57
-        sublist[1] = y
+        drivex = (camPosx6 - (camY/2) + (y*camY))
+        sublist[0] = drivex
+        drivey = (camPosy6 - (camX/2) + (x*camX))
+        sublist[1] = drivey
     
 
     totalList.extend(totalList1)

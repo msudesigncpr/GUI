@@ -10,6 +10,8 @@ import threading
 import json
 import csv
 import logging
+import CPR_random
+import CPR_tools as cpr
 '''
 import time
 from dataclasses import dataclass
@@ -25,22 +27,26 @@ import pages
 
 def main():
     #Start GUI
+
+    
     app = pages.tkinterApp()
     #names, dwell, num = app.mainloop()
     app.mainloop()
     runName, names, dwell, num = app.returnValues()
     print(runName, names, dwell, num)
-    '''
+    
 
     #TODO delete temp folder when all running
     tempFolder = "tempPhotos"
     os.makedirs(tempFolder)
 
+    '''
     #Home and setup drive manager
     drive_ctrl = DriveManager()
     print("---HOMING---")
     asyncio.run(CPRmotorctrl.home(drive_ctrl))
     print("---DONE HOMING---")
+    
 
     #Image pinhole
     print("Starting pinhole cycle")
@@ -54,7 +60,7 @@ def main():
         offsetY = diviation[1]
         print("applying offset")
         #TODO setcalibration offset
-
+'''
     #Create a new folder for were photos will go
     print("starting image cycling")
     imagesforProcessingFolder = "baseplatePhotos"
@@ -67,11 +73,11 @@ def main():
     shutil.copy(os.path.join('image5.jpg'), os.path.join(imagesforProcessingFolder, 'image5.jpg'))
     shutil.copy(os.path.join('image6.jpg'), os.path.join(imagesforProcessingFolder, 'image6.jpg'))
     
-
+    '''
     #Take Images of Petri Dishes and adds to new fodler
     numPetriDishes = 6  #TODO this should come from GUI
     asyncio.run(CPRmotorctrl.takePhotos(tempFolder, numPetriDishes, drive_ctrl))    #TODO will need to change tempFOlder to
-
+    '''
     #create a folder where text files of good corddinates will be placed
     goodColoniesFolder = "goodColonies"
     os.makedirs(goodColoniesFolder)
@@ -89,16 +95,18 @@ def main():
     #call image meta data with the file created above
     cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
 
+    '''
     #GO toeach colony, deposit, steralize needle
     dwell_duration = 5 # TODO input from GUI
     asyncio.run(CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration, drive_ctrl))
-
+    '''
+    
     #currently deleting the file after execution- will need to delete end of program
     shutil.rmtree('goodColonies')  
     shutil.rmtree(imagesforProcessingFolder)
     shutil.rmtree('runs')
     shutil.rmtree('sampleColonies')
     shutil.rmtree('yolo_dump')
-    '''
+    
     
 main()
