@@ -22,6 +22,7 @@ from tkinter import ttk
 import CPR_GUI
 
 imagesforProcessingFolder = "baseplatePhotos"
+num = 6
 
 
 def main():
@@ -31,7 +32,7 @@ def main():
             logging.warning("Deleting leftover tmp directory %s (did the last run finish successfully?)", dir)
             shutil.rmtree(dir)
 
-    #drive_ctrl = DriveManager()
+    #drive_ctrl = DriveManager()    #TODO un-delete
 
     '''#open GUI
     app = CPR_GUI.tkinterApp()
@@ -78,10 +79,13 @@ def main():
     cpr.process_petri_dish_image(image_folder_path=imagesforProcessingFolder, good_colony_coord_output_path=goodColoniesFolder)
    
     #Randomize and select 96 colonies using images from new folder *produces sampledColoniesFolder
-    coloniesToSample =CPR_random.randomize(goodColoniesFolder)   
+    coloniesToSample, colonies_lists =CPR_random.randomize(goodColoniesFolder)   
     
     #call image meta data with the file created above
     cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
+
+    #write metadata into an excel spreadsheet
+    CPR_random.metadata(colonies_lists, num)
 
     '''
     #GO toeach colony, deposit, steralize needle

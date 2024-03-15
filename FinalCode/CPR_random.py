@@ -5,6 +5,9 @@ import cv2 as cv
 import numpy as np
 from dataclasses import dataclass
 import CPR_tools as cpr
+import openpyxl
+from openpyxl.drawing.image import Image as XLImage
+
 
 #TODO delete because in constants
 SCREEN_MM_X = 130.175     #the measured distance across the screen when the camera is taking pictures from cam_pos_offset height
@@ -25,13 +28,7 @@ POSY6 = -58          #Y location of where the camera takes a picture of petri di
 #END DELETION ---------------------------------------------------------------------------
 
 sampledColoniesFolder = "sampleColonies"
-
-#Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files
-def randomize(folder_path):
-    count = 0
-    colonyXY = []
-    petriXY = []
-    WellLocations = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12',
+WellLocations = ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12',
                     'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12',
                     'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
                     'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12',
@@ -39,6 +36,13 @@ def randomize(folder_path):
                     'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
                     'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12',
                     'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'H11', 'H12']
+
+
+#Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files
+def randomize(folder_path):
+    count = 0
+    colonyXY = []
+    petriXY = []
 
     #need this to grab petri dishes in order of 1-6 *****
     for filename in glob.glob(os.path.join(folder_path, '*.txt')):
@@ -373,7 +377,6 @@ def randomize(folder_path):
         sublist[0] = drivex
         drivey = (POSY6 - (SCREEN_MM_X/2) + (x*SCREEN_MM_X))
         sublist[1] = drivey
-    
 
     totalList.extend(totalList1)
     totalList.extend(totalList2)
@@ -383,4 +386,31 @@ def randomize(folder_path):
     totalList.extend(totalList6)
 
     print(totalList)    #TODO shouldnt have to print all the time
-    return(totalList)
+    colonies_lists = [totalList1, totalList2, totalList3, totalList4, totalList5, totalList6]
+    return(totalList, colonies_lists)
+
+def metadata(colonies_lists, numPetriDishes):
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Intro'
+    worksheet['A1'] = "Each page is for a new Petri Dish"
+
+    for i, colonies in enumerate(colonies_lists, start=1):
+        sheet_name = f'PetriDish{i}'
+        worksheet = workbook.create_sheet(title=sheet_name)
+        worksheet['A1'] = f"Metadata for Petri Dish {i}"
+
+    # Write colonies to the worksheet
+    for row, colony in enumerate(colonies, start=2):
+        for col, value in enumerate(colony, start=2):
+            worksheet.cell(row=row, column=col).value = value
+
+    for row, well_location in enumerate(WellLocations[:len(colonies)], start=2):
+        worksheet.cell(row=row, column=1).value = well_location
+
+    img_path = os.path.join('metadata/petri_dish_view', f'image{i}.jpg')
+    if os.path.exists(img_path):
+        xl_img = XLImage(img_path)
+        worksheet.add_image(xl_img, f'C{len(colonies)+2}')  # Assuming the image is added after the colonies
+
+    workbook.save('practice.xlsx')

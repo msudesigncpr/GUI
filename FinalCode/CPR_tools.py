@@ -188,8 +188,8 @@ def process_petri_dish_image(image_folder_path, good_colony_coord_output_path,  
         move_YOLO_stuff(raw_yolo_dump_path)
 
         #remove all the images in resized folder, and the resized folder
-        #for file in os.listdir(resized_image_folder_path):
-        #    os.remove(os.path.join(resized_image_folder_path, file))
+        for file in os.listdir(resized_image_folder_path):
+            os.remove(os.path.join(resized_image_folder_path, file))
 
         os.rmdir(resized_image_folder_path)
 
