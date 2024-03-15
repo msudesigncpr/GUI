@@ -17,6 +17,7 @@ import datetime
 # - row_deviation_threshold / column_deviation_threshold: Threshold for the row deviation. Deviation is calculated as the absolute difference between the centroid of the pinhole and the center of the image (0.5, 0.5).
 # - margin: Multiplier for the cropped image dimensions.
 
+
 def pinhole(img_file_path, save_image_path = None, row_deviation_threshold = 0.1, column_deviation_threshold = 0.1, center_point = (0.5, 0.5), x_margin=0.07, y_margin = 0.09):
     # Reading image
     img = cv2.imread(img_file_path)
@@ -139,9 +140,6 @@ def pinhole(img_file_path, save_image_path = None, row_deviation_threshold = 0.1
         return deviation
 
 
-
-
-
 def parse_text_file(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
@@ -193,6 +191,13 @@ def resize_images(image_folder_path):
             if not os.path.exists(os.path.join(image_folder_path, 'resized')):
                 os.makedirs(os.path.join(image_folder_path, 'resized'))
             cv2.imwrite(os.path.join(image_folder_path, 'resized', image), img)
+
+            blank = np.zeros(image.shape[:2], dtype='uint8')
+            mask = cv2.circle(blank, (image.shape[1]//2 + 0, image.shape[0]//2 + 0), 200, 255, -1) #(a, b, c, d, e), c changed size of circle
+            maskedImage = cv2.bitwise_and(image, image, mask=mask)
+            cv2.imshow('Mask', maskedImage)
+            cv2.waitKey(0)
+
     except Exception as e:
         print("An error occured while resizing images + " + str(e))
 

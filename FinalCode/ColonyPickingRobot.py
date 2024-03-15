@@ -78,6 +78,7 @@ def main():
     numPetriDishes = 6  #TODO this should come from GUI
     asyncio.run(CPRmotorctrl.takePhotos(tempFolder, numPetriDishes, drive_ctrl))    #TODO will need to change tempFOlder to
     '''
+
     #create a folder where text files of good corddinates will be placed
     goodColoniesFolder = "goodColonies"
     os.makedirs(goodColoniesFolder)
