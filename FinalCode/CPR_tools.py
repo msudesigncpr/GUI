@@ -138,9 +138,16 @@ def resize_images(image_folder_path):
             img = cv2.imread(os.path.join(image_folder_path, image), cv2.IMREAD_GRAYSCALE)
             img = cv2.resize(img, (640, 640))
             #check if processed folder exists, if not create it
+
+            #crop to circle to not detect screws
+            blank = np.zeros(img.shape[:2], dtype='uint8')
+            mask = cv2.circle(blank, (img.shape[1]//2 + 0, (img.shape[0]//2)+20 + 0), 300, 255, -1) #(a, b, c, d, e), c changed size of circle
+            resized_img = cv2.bitwise_and(img, img, mask=mask)
+
             if not os.path.exists(os.path.join(image_folder_path, 'resized')):
                 os.makedirs(os.path.join(image_folder_path, 'resized'))
-            cv2.imwrite(os.path.join(image_folder_path, 'resized', image), img)
+            cv2.imwrite(os.path.join(image_folder_path, 'resized', image), resized_img)
+
     except Exception as e:
         print("An error occured while resizing images + " + str(e))
 
@@ -181,8 +188,8 @@ def process_petri_dish_image(image_folder_path, good_colony_coord_output_path,  
         move_YOLO_stuff(raw_yolo_dump_path)
 
         #remove all the images in resized folder, and the resized folder
-        for file in os.listdir(resized_image_folder_path):
-            os.remove(os.path.join(resized_image_folder_path, file))
+        #for file in os.listdir(resized_image_folder_path):
+        #    os.remove(os.path.join(resized_image_folder_path, file))
 
         os.rmdir(resized_image_folder_path)
 

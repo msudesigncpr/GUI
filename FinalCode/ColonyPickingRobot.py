@@ -14,10 +14,12 @@ import time
 from dataclasses import dataclass
 import CPR_tools as cpr
 import CPR_random
-import CPRmotorctrl
+#import CPRmotorctrl
 import asyncio
-from libmotorctrl import DriveManager, DriveTarget
-#import pages
+#from libmotorctrl import DriveManager, DriveTarget
+import tkinter as tk
+from tkinter import ttk
+import CPR_GUI
 
 imagesforProcessingFolder = "baseplatePhotos"
 
@@ -29,8 +31,25 @@ def main():
             logging.warning("Deleting leftover tmp directory %s (did the last run finish successfully?)", dir)
             shutil.rmtree(dir)
 
-    drive_ctrl = DriveManager()
+    #drive_ctrl = DriveManager()
 
+    '''#open GUI
+    app = CPR_GUI.tkinterApp()
+    app.mainloop()
+    runName, names, dwell, num = app.returnValues()
+    print(runName, names, dwell, num)
+    '''
+    #TEMP---------------------------------------------------
+    os.makedirs(imagesforProcessingFolder)
+    shutil.copy(os.path.join('image1.jpg'), os.path.join(imagesforProcessingFolder, 'image1.jpg'))
+    shutil.copy(os.path.join('image2.jpg'), os.path.join(imagesforProcessingFolder, 'image2.jpg'))
+    shutil.copy(os.path.join('image3.jpg'), os.path.join(imagesforProcessingFolder, 'image3.jpg'))
+    shutil.copy(os.path.join('image4.jpg'), os.path.join(imagesforProcessingFolder, 'image4.jpg'))
+    shutil.copy(os.path.join('image5.jpg'), os.path.join(imagesforProcessingFolder, 'image5.jpg'))
+    shutil.copy(os.path.join('image6.jpg'), os.path.join(imagesforProcessingFolder, 'image6.jpg'))
+    #END TEMP-----------------------------------------------
+
+    '''
     #Home
     print("---HOMING---")
     asyncio.run(CPRmotorctrl.home(drive_ctrl))
@@ -50,8 +69,8 @@ def main():
     #Create a new folder for were photos will go
     print("starting image cycling")
     os.makedirs(imagesforProcessingFolder)
-    numPetriDishes = 6  #TODO this should come from GUI
-    asyncio.run(CPRmotorctrl.takePhotos(imagesforProcessingFolder, numPetriDishes, drive_ctrl))
+    asyncio.run(CPRmotorctrl.takePhotos(imagesforProcessingFolder, num, drive_ctrl))
+    '''
 
     #create a folder where text files of good corddinates will be placed
     goodColoniesFolder = "goodColonies"
@@ -64,6 +83,7 @@ def main():
     #call image meta data with the file created above
     cpr.create_metadata(image_folder_path=imagesforProcessingFolder, colony_coords_folder_path='./sampleColonies', create_petri_dish_view=True, create_colony_view= True)
 
+    '''
     #GO toeach colony, deposit, steralize needle
     dwell_duration = 5 # TODO input from GUI
     asyncio.run(CPRmotorctrl.executeToolPath(coloniesToSample, dwell_duration, drive_ctrl))
@@ -74,6 +94,6 @@ def main():
     shutil.rmtree('runs')
     shutil.rmtree('sampleColonies')
     shutil.rmtree('yolo_dump')
-    
+    '''
     
 main()

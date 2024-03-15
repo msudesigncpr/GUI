@@ -5,7 +5,25 @@ PINHOLE_COORDINATES = (71, 0, 50)
 PETRI_DISH_DEPTH = 94  # Micrometers # TODO Check depth
 WELL_DEPTH = 90  # Micrometers # TODO Check depth
 CAMERA_POS_OFFSET = 50  # Micrometers # TODO Find real value
-IMAGE_COORDINATES = [[136, 62], [136, -58], [250, 62], [250, -58], [364, -58], [480, -58]] 
+
+SCREEN_MM_X = 130.175     #the measured distance across the screen when the camera is taking pictures from cam_pos_offset height
+SCREEN_MM_Y = 117.475     #the measured distance across the screen when the camera is taking pictures from cam_pos_offset height
+
+POSX1 = 66           #X location of where the camera takes a picture of petri dish 1
+POSY1 = 62           #Y location of where the camera takes a picture of petri dish 1
+POSX2 = 66           #X location of where the camera takes a picture of petri dish 2
+POSY2 = -58          #Y location of where the camera takes a picture of petri dish 2
+POSX3 = 180          #X location of where the camera takes a picture of petri dish 3
+POSY3 = 62           #Y location of where the camera takes a picture of petri dish 3
+POSX4 = 180          #X location of where the camera takes a picture of petri dish 4
+POSY4 = -58          #Y location of where the camera takes a picture of petri dish 4
+POSX5 = 294          #X location of where the camera takes a picture of petri dish 5
+POSY5 = -58          #Y location of where the camera takes a picture of petri dish 5
+POSX6 = 410          #X location of where the camera takes a picture of petri dish 6
+POSY6 = -58          #Y location of where the camera takes a picture of petri dish 6
+
+needleToCam = 70    #camera needs to take a picture with an x offset of 70 from the needle to the center of the camera
+IMAGE_COORDINATES = [[POSX1 + needleToCam, POSY1], [POSX2 + needleToCam, POSY2], [POSX3 + needleToCam, POSY3], [POSX4 + needleToCam, POSY4], [POSX5 + needleToCam, POSY5], [POSX6 + needleToCam, POSY6]] 
 
 
 
