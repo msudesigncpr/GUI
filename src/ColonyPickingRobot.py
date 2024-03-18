@@ -96,7 +96,6 @@ def main():
     shutil.rmtree("petri_dish_photos_raw")
     shutil.rmtree("runs")
     shutil.rmtree("target_colony_list")
-    shutil.rmtree("petri_dish_photos_marked")
 
 
 main()
