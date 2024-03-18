@@ -9,7 +9,7 @@ sampledColoniesFolder = "target_colony_list"
 
 
 # Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files
-def randomize(folder_path):
+def randomize(valid_colony_dir):
     count = 0
     colonyXY = []
     petriXY = []
@@ -113,8 +113,8 @@ def randomize(folder_path):
     ]
 
     # need this to grab petri dishes in order of 1-6 *****
-    for filename in glob.glob(os.path.join(folder_path, "*.txt")):
-        with open(filename, "r") as old_file:
+    for valid_colony_list in glob.glob(os.path.join(valid_colony_dir, "*.txt")):
+        with open(valid_colony_list, "r") as old_file:
             count = count + 1
             with open(f"P{count}colonies.txt", "w") as new_file:
                 for line in old_file:
