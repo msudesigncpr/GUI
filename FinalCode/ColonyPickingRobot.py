@@ -34,12 +34,12 @@ def main():
 
     #drive_ctrl = DriveManager()    #TODO un-delete
 
-    '''#open GUI
+    #open GUI
     app = CPR_GUI.tkinterApp()
     app.mainloop()
     runName, names, dwell, num = app.returnValues()
     print(runName, names, dwell, num)
-    '''
+    
     #TEMP---------------------------------------------------
     os.makedirs(imagesforProcessingFolder)
     shutil.copy(os.path.join('image1.jpg'), os.path.join(imagesforProcessingFolder, 'image1.jpg'))
