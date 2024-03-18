@@ -50,7 +50,8 @@ async def pinhole_capture(drive_ctrl, folder_path):
         img_path_to_save = os.path.join(folder_path, imgName)
         shutil.move(imgName, img_path_to_save)
     else:
-        logging.error("Invalid image capture result")
+        logging.error("Invalid image capture result!")
+        raise("Invalid image capture response")
 
 
 # Takes photos x amount of petri dishes (user specified) and saves to new folder
@@ -74,6 +75,7 @@ async def take_petri_dish_photos(folder_path, numPetriDishes, drive_ctrl):
                 shutil.move(imgName, img_path_to_save)
             else:
                 logging.error("Invalid image capture result!")
+                raise("Invalid image capture response")
             i += 1
     cam.release()
 
