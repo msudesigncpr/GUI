@@ -422,13 +422,8 @@ def randomize(valid_colony_dir):
     totalList5 = [sublist[1:3] for sublist in P5coloniesList]
     totalList6 = [sublist[1:3] for sublist in P6coloniesList]
 
-    # percentage(0.2) * 3264 *  x length across screen (15.5) / pixels(3264)
-    # xScale = 130.175
-    # yScale = 117.475
-    xScale = 16
-    yScale = 12
-    camX = 130.175
-    camY = 117.475
+    camX = 197  #mm measured accross the x dir of camera
+    camY = 257.1 #mm measured accross the y dir of camera
     camPosx1 = 66
     camPosy1 = 62
     camPosx2 = 66
@@ -445,49 +440,49 @@ def randomize(valid_colony_dir):
     for sublist in totalList1:
         x = float(sublist[0])
         y = float(sublist[1])
-        drivex = camPosx1 - (camY / 2) + (y * camY)
+        drivex = (camPosx1 - (camX / 2)) + (x * camX)
         sublist[0] = drivex
-        drivey = camPosy1 - (camX / 2) + (x * camX)
+        drivey = (camPosy1 - (camY / 2)) + (y * camY)
         sublist[1] = drivey
 
     for sublist in totalList2:
         x = float(sublist[0])
         y = float(sublist[1])
-        drivex = camPosx2 - (camX / 2) + (y * camY)
+        drivex = (camPosx2 - (camX / 2)) + (x * camX)
         sublist[0] = drivex
-        drivey = camPosy2 - (camY / 2) + (x * camX)
+        drivey = (camPosy2 - (camY / 2)) + (y * camY)
         sublist[1] = drivey
 
     for sublist in totalList3:
         x = float(sublist[0])
         y = float(sublist[1])
-        drivex = camPosx3 - (camY / 2) + (y * camY)
+        drivex = (camPosx3 - (camX / 2)) + (x * camX)
         sublist[0] = drivex
-        drivey = camPosy3 - (camX / 2) + (x * camX)
+        drivey = (camPosy3 - (camY / 2)) + (y * camY)
         sublist[1] = drivey
 
     for sublist in totalList4:
         x = float(sublist[0])
         y = float(sublist[1])
-        drivex = camPosx4 - (camY / 2) + (y * camY)
+        drivex = (camPosx4 - (camX / 2)) + (x * camX)
         sublist[0] = drivex
-        drivey = camPosy4 - (camX / 2) + (x * camX)
+        drivey = (camPosy4 - (camY / 2)) + (y * camY)
         sublist[1] = drivey
 
     for sublist in totalList5:
         x = float(sublist[0])
         y = float(sublist[1])
-        drivex = camPosx5 - (camY / 2) + (y * camY)
+        drivex = (camPosx5 - (camX / 2)) + (x * camX)
         sublist[0] = drivex
-        drivey = camPosy5 - (camX / 2) + (x * camX)
+        drivey = (camPosy5 - (camY / 2)) + (y * camY)
         sublist[1] = drivey
 
     for sublist in totalList6:
         x = float(sublist[0])
         y = float(sublist[1])
-        drivex = camPosx6 - (camY / 2) + (y * camY)
+        drivex = (camPosx6 - (camX / 2)) + (x * camX)
         sublist[0] = drivex
-        drivey = camPosy6 - (camX / 2) + (x * camX)
+        drivey = (camPosy6 - (camY / 2)) + (y * camY)
         sublist[1] = drivey
 
     totalList.extend(totalList1)

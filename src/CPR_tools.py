@@ -293,9 +293,9 @@ def process_petri_dish_image(
         # move the stuff in label_folder_path to raw_yolo_dump_path
         move_YOLO_stuff(raw_yolo_dump_path)
 
-        # remove all the images in resized folder, and the resized folder
-        for file in os.listdir(resized_image_folder_path):
-            os.remove(os.path.join(resized_image_folder_path, file))
+        # # remove all the images in resized folder, and the resized folder
+        # for file in os.listdir(resized_image_folder_path):
+        #     os.remove(os.path.join(resized_image_folder_path, file))
 
         os.rmdir(resized_image_folder_path)
 
@@ -335,6 +335,7 @@ def create_metadata(
     metadata_output_path="./metadata",
     create_petri_dish_view=False,
     create_colony_view=False,
+    petri_dish_radius=0.2
 ):
     try:
         if not create_colony_view and not create_petri_dish_view:
@@ -437,12 +438,13 @@ def create_metadata(
                         cv2.putText(
                             image,
                             str(colony_number),
-                            (int(x - 5), int(y - 5)),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.5,
-                            (0, 0, 255),
+                            (int(x + 50), int(y - 50)),
+                            cv2.FONT_HERSHEY_SIMPLEX, 2,
+                            (0, 0, 0),
                             1,
                         )
+
+                        cv2.circle(image, (int(0.5*image_width), int(0.5*image_height)), int(petri_dish_radius*image_width), (0,0,255), 2)
 
                         # TODO add a box that indicates where the needle could have gone
 
@@ -665,7 +667,7 @@ def binary_disciminate(
     width,
     height,
     margin=0.5,
-    erosion_thresholds=(25, 999, 999, 999),
+    erosion_thresholds=(999, 999, 999, 999),
     erosion_iterations=(0, 1, 2, 3),
     original_display=False,
     bad_display=False,
@@ -926,13 +928,13 @@ def discriminate(
     BLACK="MAGIC",  # do not remove--code will break
     good_output_path=None,
     bad_output_path=None,
-    min_distance=0.03,
-    min_selection_confidence=0.14,
-    min_discrimination_confidence=0.05,
+    min_distance=0.0,
+    min_selection_confidence=0.01, #                        -- CHANGE
+    min_discrimination_confidence=1.05,
     min_size=0.01,
     max_size=0.5,
     maximum_ratio=0.15,
-    petri_dish_radius=0.4,
+    petri_dish_radius=0.2,
     binary_discrimination_margin=2,
     binary_bad_display=True,
     binary_good_display=True,
