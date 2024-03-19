@@ -422,10 +422,13 @@ def randomize(valid_colony_dir):
     totalList5 = [sublist[1:3] for sublist in P5coloniesList]
     totalList6 = [sublist[1:3] for sublist in P6coloniesList]
 
-    camX = 197  #mm measured accross the x dir of camera
-    camY = 257.1 #mm measured accross the y dir of camera
-    camPosx1 = 66
-    camPosy1 = 62
+    camX = 162.307  #mm measured accross the x dir of camera
+    camY = 121.73 #mm measured accross the y dir of camera
+  
+    #changed x+5 and y-5
+    camPosx1 = 71
+    camPosy1 = 57
+
     camPosx2 = 66
     camPosy2 = -58
     camPosx3 = 180
