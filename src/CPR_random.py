@@ -1,116 +1,29 @@
 import random
 import os, glob
+from msilib.schema import _Validation_records
 import cv2 as cv
 import numpy as np
 from dataclasses import dataclass
 import CPR_tools as cpr
+import openpyxl
+from openpyxl.drawing.image import Image as XLImage
+
 
 sampledColoniesFolder = "target_colony_list"
-
+WellLocations =['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12',
+                'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12',
+                'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12',
+                'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12',
+                'E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9', 'E10', 'E11', 'E12',
+                'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',                    'G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12',
+                'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'H11', 'H12']
 
 # Randomizing colonies from 1-6 files and selecting 96: creates a list and 6 text files
 def randomize(valid_colony_dir):
     count = 0
     colonyXY = []
     petriXY = []
-    WellLocations = [
-        "A1",
-        "A2",
-        "A3",
-        "A4",
-        "A5",
-        "A6",
-        "A7",
-        "A8",
-        "A9",
-        "A10",
-        "A11",
-        "A12",
-        "B1",
-        "B2",
-        "B3",
-        "B4",
-        "B5",
-        "B6",
-        "B7",
-        "B8",
-        "B9",
-        "B10",
-        "B11",
-        "B12",
-        "C1",
-        "C2",
-        "C3",
-        "C4",
-        "C5",
-        "C6",
-        "C7",
-        "C8",
-        "C9",
-        "C10",
-        "C11",
-        "C12",
-        "D1",
-        "D2",
-        "D3",
-        "D4",
-        "D5",
-        "D6",
-        "D7",
-        "D8",
-        "D9",
-        "D10",
-        "D11",
-        "D12",
-        "E1",
-        "E2",
-        "E3",
-        "E4",
-        "E5",
-        "E6",
-        "E7",
-        "E8",
-        "E9",
-        "E10",
-        "E11",
-        "E12",
-        "F1",
-        "F2",
-        "F3",
-        "F4",
-        "F5",
-        "F6",
-        "F7",
-        "F8",
-        "F9",
-        "F10",
-        "F11",
-        "F12",
-        "G1",
-        "G2",
-        "G3",
-        "G4",
-        "G5",
-        "G6",
-        "G7",
-        "G8",
-        "G9",
-        "G10",
-        "G11",
-        "G12",
-        "H1",
-        "H2",
-        "H3",
-        "H4",
-        "H5",
-        "H6",
-        "H7",
-        "H8",
-        "H9",
-        "H10",
-        "H11",
-        "H12",
-    ]
+
 
     # need this to grab petri dishes in order of 1-6 *****
     for valid_colony_list in glob.glob(os.path.join(valid_colony_dir, "*.txt")):
@@ -425,20 +338,24 @@ def randomize(valid_colony_dir):
     camX = 162.307  #mm measured accross the x dir of camera
     camY = 121.73 #mm measured accross the y dir of camera
   
-    #changed x+5 and y-5
-    camPosx1 = 71
-    camPosy1 = 57
-
-    camPosx2 = 66
-    camPosy2 = -58
-    camPosx3 = 180
-    camPosy3 = 62
-    camPosx4 = 180
-    camPosy4 = -58
-    camPosx5 = 294
-    camPosy5 = -58
-    camPosx6 = 410
-    camPosy6 = -58
+    #changed x+3.5 and y-5
+    camPosx1 = 69.3
+    camPosy1 = 52.5
+    #changed x+4 and y-10
+    camPosx2 = 68.5
+    camPosy2 = -67
+    #changed x+4 and y-8
+    camPosx3 = 182
+    camPosy3 = 52.5
+    #changed x+4 and y-8
+    camPosx4 = 182
+    camPosy4 = -67
+    #changed x+4 and y-8
+    camPosx5 = 297.5
+    camPosy5 = -67.5
+    #changed x+4 and y-8
+    camPosx6 = 412
+    camPosy6 = -67
 
     for sublist in totalList1:
         x = float(sublist[0])
@@ -496,4 +413,67 @@ def randomize(valid_colony_dir):
     totalList.extend(totalList6)
 
     print(totalList)  # TODO shouldnt have to print all the time
-    return totalList
+    colonies_lists = [totalList1, totalList2, totalList3, totalList4, totalList5, totalList6]
+    return(totalList, colonies_lists)
+
+def metadata(runName, names, colonies_lists, numPetriDishes):
+    workbook = openpyxl.Workbook()
+    worksheet = workbook.active
+    worksheet.title = 'Intro'
+    worksheet['A1'] = "Each page is for a new Petri Dish"
+
+    well_location_offset = 0  # Initialize offset to 0
+    counter1 = 0
+
+    for i, colonies in enumerate(colonies_lists, start=1):
+        sheet_name = names[i-1]
+        worksheet = workbook.create_sheet(title=sheet_name)
+        worksheet['A1'] = f"Metadata for Petri Dish {i} named {names[i-1]}"
+        worksheet['F1'] = "Duration of sample in seconds"
+
+        counter = counter1
+
+        # Write colonies to the worksheet
+        #max_length = max(len(colonies), len(WellLocations)) #TODO bring this back, len(timeList))
+        max_length = len(colonies)
+        for row in range(2, max_length + 2):  # Start from 2 as you're starting from row 2
+            if row - 2 < len(colonies):
+               colony = colonies[row - 2]
+               for col, value in enumerate(colony, start=2):
+                 worksheet.cell(row=row, column=col).value = value
+            counter1 += 1
+
+            #if row - 2 < len(WellLocations):
+            #    worksheet.cell(row=row, column=1).value = WellLocations[row - 2]
+           # if row - 2 < len(timeList):
+           #     worksheet.cell(row=row, column=5).value = timeList[row - 2]
+        # Write WellLocations with offset
+        
+        subset_well_locations = WellLocations[counter:counter1] #[counter1:counter1 + len(colonies)]
+        for idx, well_location in enumerate(subset_well_locations, start=2):
+            worksheet.cell(row=idx, column=1).value = well_location
+
+
+        img_path = os.path.join('metadata/petri_dish_view', f'petri_dish_{i-1}.jpg')
+        if os.path.exists(img_path):
+            xl_img = XLImage(img_path)
+            worksheet.add_image(xl_img, f'F{max_length + 2}')  # 
+        
+        '''
+        for row, colony in enumerate(colonies, start=2):
+            for col, value in enumerate(colony, start=2):
+                worksheet.cell(row=row, column=col).value = value
+
+        for row, well_location in enumerate(WellLocations[:len(colonies)], start=2):
+            worksheet.cell(row=row, column=1).value = well_location
+
+        #adds times to the metadata
+        for row, time in enumerate(timeList[:len(colonies)], start=2):
+            worksheet.cell(row=row, column=5).value = time
+
+        img_path = os.path.join('metadata/petri_dish_view', f'petri_dish_{i-1}.jpg')
+        if os.path.exists(img_path):
+            xl_img = XLImage(img_path)
+            worksheet.add_image(xl_img, f'F{len(colonies)+2}')  # Assuming the image is added after the colonies
+        '''
+    workbook.save(f'{runName}.xlsx')

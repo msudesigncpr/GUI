@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-STERILIZER_COORDINATES = (450, 83, 50)  # Micrometers  # TODO
+STERILIZER_COORDINATES = (450, 80, 50)  # Micrometers  # TODO
 PINHOLE_COORDINATES = (71, 0, 50)
 PETRI_DISH_DEPTH = 110  # Micrometers # TODO Check depth
 WELL_DEPTH = 90  # Micrometers # TODO Check depth

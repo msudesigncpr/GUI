@@ -8,11 +8,11 @@ import numpy as np
 import os, glob
 import shutil
 import time
-
 cam_port = 0
 cam = cv.VideoCapture(cam_port, cv.CAP_DSHOW)
 cam.set(cv.CAP_PROP_FRAME_WIDTH, 3264)  # set frame width (max res from data sheet)
 cam.set(cv.CAP_PROP_FRAME_HEIGHT, 2448)  # set frame heigh (max res from data sheet)
+cam.set(cv.CAP_PROP_AUTO_EXPOSURE, 0.05) # Crank the exposure!
 
 LOGLEVEL = logging.INFO
 
@@ -79,7 +79,7 @@ async def take_petri_dish_photos(folder_path, numPetriDishes, drive_ctrl):
             i += 1
     cam.release()
 
-
+timeList = []
 async def execute_tool_path(valid_colonies_raw, dwell_duration, drive_ctrl):
     target_colonies = []
     for colony in valid_colonies_raw:
@@ -99,6 +99,7 @@ async def execute_tool_path(valid_colonies_raw, dwell_duration, drive_ctrl):
     await asyncio.sleep(dwell_duration)
 
     for colony in target_colonies:
+        timeStampStart = time.time()
         logging.info("Starting sampling cycle...")
         logging.info(
             f"Target colony is at {colony.x:.2f}, {colony.y:.2f} in Petri dish {colony.dish}"
@@ -135,7 +136,15 @@ async def execute_tool_path(valid_colonies_raw, dwell_duration, drive_ctrl):
         )
         logging.info("Sleeping for %s seconds...", dwell_duration)
         await asyncio.sleep(dwell_duration)
+        timeStampEnd = time.time()
+
+        sampleTime = timeStampEnd - timeStampStart
+        seconds = int(sampleTime % 60)
+        timeList.append(seconds)
+        logging.info(f"Sample took {seconds} seconds")
 
     logging.info("Sampling complete!")
     await drive_ctrl.move(415_000, -110_000, 0)
     await drive_ctrl.terminate()
+
+    return timeList

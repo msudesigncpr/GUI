@@ -9,6 +9,7 @@ import CPR_tools as cpr
 import CPR_random
 import CPRmotorctrl
 import asyncio
+import CPR_GUI
 from libmotorctrl import DriveManager, DriveTarget
 
 TMP_DIRECTORIES = [
@@ -21,10 +22,12 @@ TMP_DIRECTORIES = [
     "metadata",
 ]
 
-
 def main():
-    dwell_duration = 5  # TODO input from GUI
-    petri_dish_count = 6  # TODO this should come from GUI
+    #open GUI
+    app = CPR_GUI.tkinterApp()
+    app.mainloop()
+    runName, names, dwell_duration, petri_dish_count = app.returnValues()
+    print(runName, names, dwell_duration, petri_dish_count)
 
     for dir in TMP_DIRECTORIES:
         if os.path.exists(dir) and os.path.isdir(dir):
@@ -76,7 +79,7 @@ def main():
 
     # Randomize and select 96 colonies using images from new folder
     # (produces target_colony_list directory containing images)
-    coloniesToSample = CPR_random.randomize("valid_colony_list")
+    coloniesToSample, colonies_list = CPR_random.randomize("valid_colony_list")
 
     # call image meta data with the file created above
     cpr.create_metadata(
@@ -85,11 +88,17 @@ def main():
         create_petri_dish_view=True,
         create_colony_view=True,
     )
+    
+    #move back down and bring back the timeList, bring it back in random too
+    #Produce MetaData
+    CPR_random.metadata(runName, names, colonies_list, petri_dish_count)
+
 
     # Perform sampling cycle
-    asyncio.run(
+    timeList = asyncio.run(
         CPRmotorctrl.execute_tool_path(coloniesToSample, dwell_duration, drive_ctrl)
     )
+
 
     # currently deleting the file after execution- will need to delete end of program
     shutil.rmtree("valid_colony_list")
